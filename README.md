@@ -73,11 +73,19 @@ Extensive example
 <pre lang="ruby">
 let queue = TaskQueue()
 
+//
+// Simple sync task, just prints to console
+//
 queue.tasks += {
     self.logToTextView("====== tasks ======")
     self.logToTextView("task #1: run")
 }
 
+//
+// A task, which can be asynchronious because it gets
+// result and next params and can call next() when ready 
+// with async work to tell the queue to continue running
+//
 queue.tasks += { result, next in
     self.logToTextView("task #2: begin")
     
@@ -88,6 +96,12 @@ queue.tasks += { result, next in
     
 }
 
+//
+// A task which retries the same task over and over again
+// until it succeeds (i.e. util when you make network calls)
+// NB! Important to capture **queue** as weak to prevent 
+// memory leaks!
+//
 var cnt = 1
 queue.tasks += {[weak queue] result, next in
     self.logToTextView("task #3: try #\(cnt)")
@@ -99,6 +113,10 @@ queue.tasks += {[weak queue] result, next in
     }
 }
 
+//
+// This task skips the next task in queue
+// (no capture cycle here)
+//
 queue.tasks += ({
     self.logToTextView("task #4: run")
     self.logToTextView("task #4: will skip next task")
@@ -110,6 +128,12 @@ queue.tasks += {
     self.logToTextView("task #5: run")
 }
 
+//
+// This task removes all remaining tasks in the queue
+// i.e. util when an operation fails and the rest of the queueud
+// tasks don't make sense anymore
+// NB: This does not remove the completions added
+//
 queue.tasks += {
     self.logToTextView("task #6: run")
     
@@ -126,8 +150,18 @@ queue.tasks += {
     self.logToTextView("task #7: run")
 }
 
+//
+// This either runs or resumes the queue
+// If queue is running doesn't do anything
+//
 queue.run()
 
+//
+// This either runs or resumes the queue
+// and adds the given closure to the lists of completions.
+// You can add as many completions as you want (also half way)
+// trough executing the queue.
+//
 queue.run {result in
     self.logToTextView("====== completions ======")
     self.logToTextView("initial completion: run")
