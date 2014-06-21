@@ -36,7 +36,7 @@ TaskQueue will execute the tasks one after the other waiting for each task to fi
 
 More interesting of course is when you have to do some asynchronious work in the background in your tasks. Then you can fetch the **next** parameter in your task and call it whenever your async work is done:
 
-<pre lang="ruby">
+<pre lang="swift">
 let queue = TaskQueue()
 
 queue.tasks += { result, next in
