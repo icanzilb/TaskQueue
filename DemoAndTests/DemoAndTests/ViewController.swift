@@ -33,12 +33,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let queue = TaskQueue()
-        
+
         queue.tasks += {
             self.logToTextView("====== tasks ======")
             self.logToTextView("task #1: run")
         }
-        
+
         queue.tasks += { result, next in
             self.logToTextView("task #2: begin")
             
@@ -48,7 +48,7 @@ class ViewController: UIViewController {
             }
             
         }
-        
+
         var cnt = 1
         queue.tasks += {[weak queue] result, next in
             self.logToTextView("task #3: try #\(cnt)")
@@ -59,18 +59,18 @@ class ViewController: UIViewController {
                 queue!.retry(delay: 1)
             }
         }
-        
+
         queue.tasks += ({
             self.logToTextView("task #4: run")
             self.logToTextView("task #4: will skip next task")
             
             queue.skip()
             })
-        
+
         queue.tasks += {
             self.logToTextView("task #5: run")
         }
-        
+
         queue.tasks += {
             self.logToTextView("task #6: run")
             
@@ -82,13 +82,13 @@ class ViewController: UIViewController {
             self.logToTextView("task #6: will skip all remaining tasks")
             queue.removeAll()
         }
-        
+
         queue.tasks += {
             self.logToTextView("task #7: run")
         }
-        
+
         queue.run()
-        
+
         queue.run {result in
             self.logToTextView("====== completions ======")
             self.logToTextView("initial completion: run")
