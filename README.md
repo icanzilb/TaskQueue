@@ -16,7 +16,7 @@ Simple Example
 
 Here's the simplest way to use TaskQueue in Swift:
 
-<pre lang="ruby">
+<pre lang="swift">
 let queue = TaskQueue()
 
 queue.tasks += {
