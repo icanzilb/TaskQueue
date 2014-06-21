@@ -142,4 +142,4 @@ Author: [Marin Todorov](http://www.touch-code-magazine.com/about/)
 
 This code is distributed under the MIT license (included in the repository as LICENSE)
 
-TODO: tests coverage
+TODO: 1) tests coverage 2) more detailed description in README
