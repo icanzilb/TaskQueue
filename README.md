@@ -70,7 +70,7 @@ Few things to highlight in the example above:
 Extensive example
 ========
 
-<pre lang="ruby">
+<pre lang="swift">
 let queue = TaskQueue()
 
 //
