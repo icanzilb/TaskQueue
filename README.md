@@ -77,8 +77,8 @@ let queue = TaskQueue()
 // Simple sync task, just prints to console
 //
 queue.tasks += {
-    self.logToTextView("====== tasks ======")
-    self.logToTextView("task #1: run")
+    println("====== tasks ======")
+    println("task #1: run")
 }
 
 //
@@ -87,10 +87,10 @@ queue.tasks += {
 // with async work to tell the queue to continue running
 //
 queue.tasks += { result, next in
-    self.logToTextView("task #2: begin")
+    println("task #2: begin")
     
     delay(seconds: 2) {
-        self.logToTextView("task #2: end")
+        println("task #2: end")
         next(nil)
     }
     
@@ -104,7 +104,7 @@ queue.tasks += { result, next in
 //
 var cnt = 1
 queue.tasks += {[weak queue] result, next in
-    self.logToTextView("task #3: try #\(cnt)")
+    println("task #3: try #\(cnt)")
     
     if ++cnt > 3 {
         next(nil)
@@ -118,14 +118,14 @@ queue.tasks += {[weak queue] result, next in
 // (no capture cycle here)
 //
 queue.tasks += ({
-    self.logToTextView("task #4: run")
-    self.logToTextView("task #4: will skip next task")
+    println("task #4: run")
+    println("task #4: will skip next task")
     
     queue.skip()
     })
 
 queue.tasks += {
-    self.logToTextView("task #5: run")
+    println("task #5: run")
 }
 
 //
@@ -135,19 +135,19 @@ queue.tasks += {
 // NB: This does not remove the completions added
 //
 queue.tasks += {
-    self.logToTextView("task #6: run")
+    println("task #6: run")
     
-    self.logToTextView("task #6: will append one more completion")
+    println("task #6: will append one more completion")
     queue.run {
-        _ in self.logToTextView("completion: appended completion run")
+        _ in println("completion: appended completion run")
     }
     
-    self.logToTextView("task #6: will skip all remaining tasks")
+    println("task #6: will skip all remaining tasks")
     queue.removeAll()
 }
 
 queue.tasks += {
-    self.logToTextView("task #7: run")
+    println("task #7: run")
 }
 
 //
@@ -163,8 +163,8 @@ queue.run()
 // trough executing the queue.
 //
 queue.run {result in
-    self.logToTextView("====== completions ======")
-    self.logToTextView("initial completion: run")
+    println("====== completions ======")
+    println("initial completion: run")
 }
 </pre>
 
