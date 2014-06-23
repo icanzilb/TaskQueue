@@ -1,6 +1,8 @@
 TaskQueue (Swift)
 =========
 
+![https://raw.githubusercontent.com/icanzilb/TaskQueue/master/tq-schema1.png](https://raw.githubusercontent.com/icanzilb/TaskQueue/master/tq-schema1.png)
+
 #### ver 0.6
 
 I've been using for a long time in my iOS projects a class called Sequencer which makes executing async processes in synchronious fashion very easy. Here's the source code of [Sequencer by berzniz](https://github.com/berzniz/Sequencer).
