@@ -25,8 +25,8 @@ class TaskQueue {
     //
     // tasks and completions storage
     //
-    var tasks:ClosureWithResultNext[] = []
-    @lazy var completions: ClosureWithResult[] = []
+    var tasks:[ClosureWithResultNext] = []
+    @lazy var completions: [ClosureWithResult] = []
 
     //
     // queue state
@@ -166,7 +166,7 @@ class TaskQueue {
     }
 }
 
-@assignment func += (inout tasks: TaskQueue.ClosureWithResultNext[], task: TaskQueue.ClosureNoResultNext) {
+@assignment func += (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
     tasks += {
         _, next in
         task()
