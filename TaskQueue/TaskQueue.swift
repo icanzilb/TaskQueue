@@ -9,9 +9,14 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 // This class was heavily inspired by Sequencer (objc) https://github.com/berzniz/Sequencer
-// but aimed to 1) bring more flow control 2) port to swift
+// but aimed to 1) bring more flow control, 2) port to swift, 3) control of gdc queues
 
 import Foundation
+
+enum TaskQueueGCD {
+    case MainQueue
+    case BackgroundQueue
+}
 
 class TaskQueue {
     
@@ -65,6 +70,23 @@ class TaskQueue {
     }
     
     //
+    // start or resume the queue with a completion closure
+    // enforcing a main or background queue for the completion
+    //
+    func run(targetGCDQueue: TaskQueueGCD, completion: ClosureWithResult) {
+        switch targetGCDQueue {
+        case .MainQueue:
+            dispatch_async(dispatch_get_main_queue(), {
+                self.run(completion)
+                })
+        case .BackgroundQueue:
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), {
+                self.run(completion)
+                })
+        }
+    }
+    
+    //
     // pause the queue execution
     //
     func pause() {
@@ -108,8 +130,8 @@ class TaskQueue {
         }
         
         currentTask = tasks.removeAtIndex(0)
-        currentTask!(result) {[weak self] (nextResult:AnyObject?) in
-            self!._runNextTask(result: nextResult)
+        currentTask!(result) { (nextResult:AnyObject?) in
+            self._runNextTask(result: nextResult)
         }
         
     }
@@ -164,8 +186,25 @@ class TaskQueue {
         
         _runNextTask(result: currentResult)
     }
+
+    deinit {
+        //println("queue deinit")
+    }
 }
 
+//
+// Operator overlaoding helps to make adding tasks to the queue
+// more readable and easy to understand. You just keep adding closures
+// to the tasks array and the operators adjust your task to the desired
+// ClosureWithResultNext type.
+//
+
+operator infix +=~ {}
+operator infix +=! {}
+
+//
+// Add a task closure that doesn't take result/next params
+//
 @assignment func += (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
     tasks += {
         _, next in
@@ -173,3 +212,55 @@ class TaskQueue {
         next(nil)
     }
 }
+
+//
+// Add a task closure that doesn't take result/next params
+// The task gets executed on a low prio queueu
+//
+@assignment func +=~ (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
+    tasks += {
+        _, next in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), {
+            task()
+            next(nil)
+        })
+    }
+}
+
+//
+// The task gets executed on a low prio queueu
+//
+@assignment func +=~ (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureWithResultNext) {
+    tasks += {result, next in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), {
+            task(result, next)
+        })
+    }
+}
+
+//
+// Add a task closure that doesn't take result/next params
+// The task gets executed on the main queue - update UI, etc.
+//
+@assignment func +=! (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
+    tasks += {
+        _, next in
+        dispatch_async(dispatch_get_main_queue(), {
+            task()
+            next(nil)
+        })
+    }
+}
+
+//
+// The task gets executed on the main queue - update UI, etc.
+//
+@assignment func +=! (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureWithResultNext) {
+    tasks += {
+        result, next in
+        dispatch_async(dispatch_get_main_queue(), {
+            task(result, next)
+        })
+    }
+}
+
