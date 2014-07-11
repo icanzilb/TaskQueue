@@ -73,7 +73,7 @@ class TaskQueue {
     // start or resume the queue with a completion closure
     // enforcing a main or background queue for the completion
     //
-    func run(targetGCDQueue: TaskQueueGCD, completion: ClosureWithResult) {
+    func run(targetGCDQueue: TaskQueueGCD, completion: ClosureWithResult? = nil) {
         switch targetGCDQueue {
         case .MainQueue:
             dispatch_async(dispatch_get_main_queue(), {

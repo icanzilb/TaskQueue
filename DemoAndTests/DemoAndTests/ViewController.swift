@@ -98,14 +98,18 @@ class ViewController: UIViewController {
         //main queue taskqueue
         self.logToTextView("\nfunc demoRunQueues()")
         self.logToTextView("create queue on main GCD queue")
+        
         let queueMain = TaskQueue()
         queueMain.tasks += {
             sleep(3)
             return
         }
-        queueMain.run(.MainQueue) {_ in
+        
+        queueMain.tasks += {
             self.logToTextView("finished queue on main GCD queue")
         }
+        
+        queueMain.run(.MainQueue)
 
         //bg queue taskqueue
         self.logToTextView("create queue on low prio GCD queue")

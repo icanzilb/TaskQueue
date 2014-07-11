@@ -1,7 +1,9 @@
 TaskQueue (Swift)
 =========
 
-#### ver 0.6
+#### ver 0.7
+
+**New in 0.7:** GCD queue control - you can select on which GCD queue each of the tasks in the TaskQueue should run.
 
 ![https://raw.githubusercontent.com/icanzilb/TaskQueue/master/tq-schema1.png](https://raw.githubusercontent.com/icanzilb/TaskQueue/master/tq-schema1.png)
 
@@ -69,6 +71,52 @@ Few things to highlight in the example above:
 2. Task nr.2 doesn't get started until you call **next()** in your previous task
 
 3. The **run** function can also take a closure as a parameter - if you pass one it will always get executed after all other tasks has finished.
+
+GCD Queue control
+========
+
+Do you want to run couple of heavy duty tasks in the background and then switch to the main queue to update your app UI? Easy. Study the example below, which showcases GCD queue control with **TaskQueue**:
+
+<pre lang="swift">
+let queue = TaskQueue()
+
+//
+// "+=" adds a task without specifying on which queue it should run
+// NB: the tasks will run on the GCD queue the previous tasks ran,
+// i.e. if you change to background queue - all tasks that follow will run
+// on that queue
+//
+queue.tasks += {
+    //Update the App UI
+}
+
+//
+// "+=~" adds a task to be executed in the background, e.g. low prio queue
+// "~" stands for so~so priority
+//
+queue.tasks +=~ {
+    //do heavy work
+}
+
+//
+// "+=!" adds a task to be executed on the main queue
+// "!" stands for High! priority
+//
+queue.tasks +=! {
+    //update the UI again
+}
+
+// to start the taskqueue on the current GCD queue
+queue.run()
+
+// to start the taskqueue on the main GCD queue
+queue.run(.MainQueue)
+
+// to start the taskqueue on a low prio GCD queue
+queue.run(.BackgroundQueue)
+
+</pre>
+
 
 Extensive example
 ========
@@ -179,4 +227,8 @@ Author: [Marin Todorov](http://www.touch-code-magazine.com/about/)
 
 This code is distributed under the MIT license (included in the repository as LICENSE)
 
-TODO: 1) tests coverage 2) more detailed description in README
+TODO: 
+
+ 1. tests coverage 
+ 2. more detailed description in README
+ 3. add a way to specify on which GCD queue the completeion should fall
