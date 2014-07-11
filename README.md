@@ -3,7 +3,7 @@ TaskQueue (Swift)
 
 #### ver 0.7
 
-**New in 0.7:** GCD queue control - you can select on which GCD queue each of the tasks in the TaskQueue should run.
+**New in 0.7:** GCD queue control - you can select on which GCD queue each of the tasks in the TaskQueue should run. Read about TaskQueue and GCD in the [GCD section below](https://github.com/icanzilb/TaskQueue#gcd-queue-control).
 
 ![https://raw.githubusercontent.com/icanzilb/TaskQueue/master/tq-schema1.png](https://raw.githubusercontent.com/icanzilb/TaskQueue/master/tq-schema1.png)
 
