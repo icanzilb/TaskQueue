@@ -26,7 +26,7 @@ func delay(#seconds:Double, completion:()->()) {
 
 class ViewController: UIViewController {
     
-    @IBOutlet var text:UITextView
+    @IBOutlet var text:UITextView!
     
     func logToTextView(line:String) {
         dispatch_async(dispatch_get_main_queue(), {

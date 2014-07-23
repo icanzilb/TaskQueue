@@ -31,7 +31,7 @@ class TaskQueue {
     // tasks and completions storage
     //
     var tasks:[ClosureWithResultNext] = []
-    @lazy var completions: [ClosureWithResult] = []
+    lazy var completions: [ClosureWithResult] = []
 
     //
     // queue state
