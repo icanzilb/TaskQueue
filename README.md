@@ -1,13 +1,14 @@
 TaskQueue (Swift)
 =========
 
-#### ver 0.7
+#### ver 0.8
+
+**New in 0.8:** iOS8 beta 5 compatible, syntax remains unchanged but run(TaskQueueGDC, completion) is removed as it is redundant.
 
 **New in 0.7:** GCD queue control - you can select on which GCD queue each of the tasks in the TaskQueue should run. Read about TaskQueue and GCD in the [GCD section below](https://github.com/icanzilb/TaskQueue#gcd-queue-control).
 
-![https://raw.githubusercontent.com/icanzilb/TaskQueue/master/tq-schema1.png](https://raw.githubusercontent.com/icanzilb/TaskQueue/master/tq-schema1.png)
-
-
+Intro
+========
 I've been using for a long time in my iOS projects a class called Sequencer which makes executing async processes in synchronious fashion very easy. Here's the source code of [Sequencer by berzniz](https://github.com/berzniz/Sequencer).
 
 However Sequencer lacks any flow control features - i.e. if you would like to add a new tasks to the queue, skip a task, re-try a task (very important when dealing with network calls), etc.
