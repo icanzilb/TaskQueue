@@ -126,7 +126,7 @@ class ViewController: UIViewController {
     }
     
     //
-    // Demo method #2
+    // Demo method #3
     // Show different flow control methods
     //
     func demoAllMethods() {
@@ -177,7 +177,7 @@ class ViewController: UIViewController {
             self.logToTextView("task #6: will append one more completion")
             queue.run {_ in
                 self.logToTextView("completion: appended completion run")
-                self.logToTextView("\n---- demo completed ----\n")
+                self.demoNestedQueues();
             }
             
             self.logToTextView("task #6: will skip all remaining tasks")
@@ -205,6 +205,54 @@ class ViewController: UIViewController {
             queue!.run()
         }
         
+    }
+    
+    //
+    // Demo method #4
+    // Show nested queues
+    //
+    func demoNestedQueues() {
+        let masterQueue = TaskQueue()
+        
+        masterQueue.tasks += {
+            self.logToTextView("====== nested queues ======")
+            self.logToTextView("started master queue");
+        }
+        
+        masterQueue.tasks += {_, nestedQueueCompletedNext in
+
+            self.logToTextView("start nested queue")
+
+            let nestedQueue = TaskQueue()
+
+            nestedQueue.tasks += {_, next in
+                self.logToTextView("execute nested task #1")
+                delay(seconds: 2.0) {
+                    next(nil)
+                }
+            }
+            
+            nestedQueue.tasks += {_, next in
+                self.logToTextView("execute nested task #2")
+                delay(seconds: 2.0) {
+                    next(nil)
+                }
+            }
+            
+            nestedQueue.run {_ in
+                self.logToTextView("completed nested queue")
+                nestedQueueCompletedNext(nil)
+            }
+        }
+        
+        masterQueue.tasks += {
+            self.logToTextView("back to master queue");
+        }
+
+        masterQueue.run {_ in
+            self.logToTextView("master queue completed");
+            self.logToTextView("\n---- demo completed ----\n")
+        }
     }
 }
 
