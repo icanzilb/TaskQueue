@@ -9,14 +9,11 @@
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 // This class was heavily inspired by Sequencer (objc) https://github.com/berzniz/Sequencer
-// but aimed to 1) bring more flow control, 2) port to swift, 3) control of gdc queues
+// but aimed to 1) bring more flow control, 2) port to swift, 3) control of GDC queues
 
 import Foundation
 
-enum TaskQueueGCD {
-    case MainQueue
-    case BackgroundQueue
-}
+// MARK: TaskQueue class
 
 class TaskQueue {
     
@@ -50,9 +47,9 @@ class TaskQueue {
     // start or resume the queue
     //
     func run(completion:ClosureWithResult? = nil) {
-        if completion {
+        if completion != nil {
             hasCompletions = true
-            completions += completion!
+            completions += [completion!]
         }
         
         if (paused) {
@@ -70,23 +67,6 @@ class TaskQueue {
     }
     
     //
-    // start or resume the queue with a completion closure
-    // enforcing a main or background queue for the completion
-    //
-    func run(targetGCDQueue: TaskQueueGCD, completion: ClosureWithResult? = nil) {
-        switch targetGCDQueue {
-        case .MainQueue:
-            dispatch_async(dispatch_get_main_queue(), {
-                self.run(completion)
-                })
-        case .BackgroundQueue:
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), {
-                self.run(completion)
-                })
-        }
-    }
-    
-    //
     // pause the queue execution
     //
     func pause() {
@@ -100,7 +80,7 @@ class TaskQueue {
         stopped = true
     }
     
-    func _runNextTask(result: AnyObject? = nil) {
+    private func _runNextTask(result: AnyObject? = nil) {
         if (stopped) {
             tasks.removeAll(keepCapacity: false)
             completions.removeAll(keepCapacity: false)
@@ -136,7 +116,7 @@ class TaskQueue {
         
     }
     
-    func _complete() {
+    private func _complete() {
         running = false
         paused = false
         currentTask = nil
@@ -199,68 +179,80 @@ class TaskQueue {
 // ClosureWithResultNext type.
 //
 
-operator infix +=~ {}
-operator infix +=! {}
+infix operator  +=~ {}
+infix operator  +=! {}
+
+// MARK: Add tasks on the current queue
+
+//
+// Add a task closure with result and next params
+//
+func += (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureWithResultNext) {
+    tasks += [task]
+}
 
 //
 // Add a task closure that doesn't take result/next params
 //
-@assignment func += (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
-    tasks += {
+func += (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
+    tasks += [{
         _, next in
         task()
         next(nil)
-    }
+    }]
 }
+
+// MARK: Add tasks on a background queueu
 
 //
 // Add a task closure that doesn't take result/next params
 // The task gets executed on a low prio queueu
 //
-@assignment func +=~ (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
-    tasks += {
+func +=~ (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
+    tasks += [{
         _, next in
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), {
             task()
             next(nil)
         })
-    }
+    }]
 }
 
 //
 // The task gets executed on a low prio queueu
 //
-@assignment func +=~ (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureWithResultNext) {
-    tasks += {result, next in
+func +=~ (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureWithResultNext) {
+    tasks += [{result, next in
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), {
             task(result, next)
         })
-    }
+    }]
 }
+
+// MARK: Add tasks on the main queue
 
 //
 // Add a task closure that doesn't take result/next params
 // The task gets executed on the main queue - update UI, etc.
 //
-@assignment func +=! (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
-    tasks += {
+func +=! (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureNoResultNext) {
+    tasks += [{
         _, next in
         dispatch_async(dispatch_get_main_queue(), {
             task()
             next(nil)
         })
-    }
+    }]
 }
 
 //
 // The task gets executed on the main queue - update UI, etc.
 //
-@assignment func +=! (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureWithResultNext) {
-    tasks += {
+func +=! (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.ClosureWithResultNext) {
+    tasks += [{
         result, next in
         dispatch_async(dispatch_get_main_queue(), {
             task(result, next)
         })
-    }
+    }]
 }
-

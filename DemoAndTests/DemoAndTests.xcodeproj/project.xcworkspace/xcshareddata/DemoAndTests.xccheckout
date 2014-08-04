@@ -10,29 +10,29 @@
 	<string>DemoAndTests</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>FE8D651C-8D8A-45DC-9F5A-0B2AA527641D</key>
+		<key>AC937157CCBC4EB00B0BE238B5734E5FF0A7E5BC</key>
 		<string>https://github.com/icanzilb/TaskQueue.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>DemoAndTests/DemoAndTests.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>FE8D651C-8D8A-45DC-9F5A-0B2AA527641D</key>
+		<key>AC937157CCBC4EB00B0BE238B5734E5FF0A7E5BC</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/icanzilb/TaskQueue.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>FE8D651C-8D8A-45DC-9F5A-0B2AA527641D</string>
+	<string>AC937157CCBC4EB00B0BE238B5734E5FF0A7E5BC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>FE8D651C-8D8A-45DC-9F5A-0B2AA527641D</string>
+			<string>AC937157CCBC4EB00B0BE238B5734E5FF0A7E5BC</string>
 			<key>IDESourceControlWCCName</key>
 			<string>TaskQueue</string>
 		</dict>

@@ -86,47 +86,12 @@ class ViewController: UIViewController {
         queue.run {_ in
             self.logToTextView("queue finished")
             self.logToTextView("")
-            delay(seconds: 1, self.demoRunQueues)
-        }
-    }
-
-    //
-    // Demo method #2
-    // Show how to run the queue on different GCD queues
-    //
-    func demoRunQueues() {
-        //main queue taskqueue
-        self.logToTextView("\nfunc demoRunQueues()")
-        self.logToTextView("create queue on main GCD queue")
-        
-        let queueMain = TaskQueue()
-        queueMain.tasks += {
-            sleep(3)
-            return
-        }
-        
-        queueMain.tasks += {
-            self.logToTextView("finished queue on main GCD queue")
-        }
-        
-        queueMain.run(.MainQueue)
-
-        //bg queue taskqueue
-        self.logToTextView("create queue on low prio GCD queue")
-        let queueBg = TaskQueue()
-        queueBg.tasks += {
-            sleep(3)
-            return
-        }
-        queueBg.run(.BackgroundQueue) {_ in
-            self.logToTextView("finished queue on low prio GCD queue")
             delay(seconds: 1, self.demoAllMethods)
         }
-        
     }
     
     //
-    // Demo method #3
+    // Demo method #2
     // Show different flow control methods
     //
     func demoAllMethods() {
@@ -177,7 +142,7 @@ class ViewController: UIViewController {
             self.logToTextView("task #6: will append one more completion")
             queue.run {_ in
                 self.logToTextView("completion: appended completion run")
-                self.demoNestedQueues();
+                delay(seconds: 1.5, self.demoNestedQueues)
             }
             
             self.logToTextView("task #6: will skip all remaining tasks")
@@ -208,7 +173,7 @@ class ViewController: UIViewController {
     }
     
     //
-    // Demo method #4
+    // Demo method #3
     // Show nested queues
     //
     func demoNestedQueues() {
