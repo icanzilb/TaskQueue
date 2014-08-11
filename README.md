@@ -110,12 +110,6 @@ queue.tasks +=! {
 // to start the taskqueue on the current GCD queue
 queue.run()
 
-// to start the taskqueue on the main GCD queue
-queue.run(.MainQueue)
-
-// to start the taskqueue on a low prio GCD queue
-queue.run(.BackgroundQueue)
-
 </pre>
 
 
