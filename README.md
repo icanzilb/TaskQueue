@@ -1,20 +1,27 @@
 TaskQueue (Swift)
 =========
 
-#### ver 0.8
+#### ver 0.8.2
 
-**New in 0.8:** iOS8 beta 5 compatible, syntax remains unchanged but run(TaskQueueGDC, completion) is removed as it is redundant.
+Contents of this readme
 
-**New in 0.7:** GCD queue control - you can select on which GCD queue each of the tasks in the TaskQueue should run. Read about TaskQueue and GCD in the [GCD section below](https://github.com/icanzilb/TaskQueue#gcd-queue-control).
+* <a href="#intro">Intro</a>
+* <a href="#simple">Simple Example</a>
+* <a href="#gdc">GDC Queue Control</a>
+* <a href="#extensive">Extensive Example</a>
+* <a href="#version">Version History</a>
+* <a href="#misc">Credits and Misc</a>
 
+<a name="intro"></a>
 Intro
 ========
-I've been using for a long time in my iOS projects a class called Sequencer which makes executing async processes in synchronious fashion very easy. Here's the source code of [Sequencer by berzniz](https://github.com/berzniz/Sequencer).
+TaskQueue is a Swift library which allows you to schedule tasks once and then let the queue execute them in a synchronious matter. The great thing about TaskQueue is that you get to decide on which GCD queue each of your tasks should execute beforehand and leave TaskQueue to do switching of queues as it goes.
 
-However Sequencer lacks any flow control features - i.e. if you would like to add a new tasks to the queue, skip a task, re-try a task (very important when dealing with network calls), etc.
+Even if your tasks are asynchronious like fetching location, downloading files, etc. TaskQueue will wait until they are finished before going on with the next task.
 
-That's why I wrote TaskQueue for Swift - it employees the Sequencer approach in a more flexible way allowing for greater control and more powerful task management.
+Last but not least your tasks have full flow control over the queue, depending on the outcome of the work you are doing in your tasks you can skip the next task, abort the queue, or jump ahead to the queue completion. You can further pause, resume, and stop the queue.
 
+<a name="simple"></a>
 Simple Example
 ========
 
@@ -73,6 +80,7 @@ Few things to highlight in the example above:
 
 3. The **run** function can also take a closure as a parameter - if you pass one it will always get executed after all other tasks has finished.
 
+<a name="gcd"></a>
 GCD Queue control
 ========
 
@@ -112,7 +120,7 @@ queue.run()
 
 </pre>
 
-
+<a name="extensive"></a>
 Extensive example
 ========
 
@@ -216,6 +224,17 @@ queue.run {result in
 
 Run the included demo app to see some of these examples above in action.
 
+<a name="version"></a>
+Version History
+========
+
+**New in 0.8.2:** iOS8 beta 6 compatible, adding subqueues directly to <code>tasks</code>
+
+**New in 0.8:** iOS8 beta 5 compatible, syntax remains unchanged but run(TaskQueueGDC, completion) is removed as it is redundant.
+
+**New in 0.7:** GCD queue control - you can select on which GCD queue each of the tasks in the TaskQueue should run. Read about TaskQueue and GCD in the [GCD section below](https://github.com/icanzilb/TaskQueue#gcd-queue-control).
+
+<a name="misc"></a>
 Misc
 ========
 Author: [Marin Todorov](http://www.touch-code-magazine.com/about/)
