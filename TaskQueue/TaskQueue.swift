@@ -1,5 +1,5 @@
 //
-// TaskQueue.swift ver. 0.8
+// TaskQueue.swift ver. 0.8.2
 //
 // Copyright (c) 2014 Marin Todorov, Underplot ltd.
 // This code is distributed under the terms and conditions of the MIT license.
@@ -256,3 +256,18 @@ func +=! (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.Closur
         })
     }]
 }
+
+// MARK: Adding sub-queues
+
+//
+// Add a queue to the task list
+//
+func += (inout tasks: [TaskQueue.ClosureWithResultNext], queue: TaskQueue) {
+    tasks += [{
+        _, next in
+        queue.run {result in
+            next(result)
+        }
+    }]
+}
+

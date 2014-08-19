@@ -184,32 +184,27 @@ class ViewController: UIViewController {
             self.logToTextView("started master queue");
         }
         
-        masterQueue.tasks += {_, nestedQueueCompletedNext in
-
-            self.logToTextView("start nested queue")
-
-            let nestedQueue = TaskQueue()
-
-            nestedQueue.tasks += {_, next in
-                self.logToTextView("execute nested task #1")
-                delay(seconds: 2.0) {
-                    next(nil)
-                }
-            }
-            
-            nestedQueue.tasks += {_, next in
-                self.logToTextView("execute nested task #2")
-                delay(seconds: 2.0) {
-                    next(nil)
-                }
-            }
-            
-            nestedQueue.run {_ in
-                self.logToTextView("completed nested queue")
-                nestedQueueCompletedNext(nil)
+        //define nested queue
+        let nestedQueue = TaskQueue()
+        nestedQueue.tasks += {_, next in
+            self.logToTextView("execute nested task #1")
+            delay(seconds: 2.0) {
+                next(nil)
             }
         }
+        nestedQueue.tasks += {_, next in
+            self.logToTextView("execute nested task #2")
+            delay(seconds: 2.0) {
+                next(nil)
+            }
+        }
+        nestedQueue.completions.append({_ in
+            self.logToTextView("completed nested queue")
+        })
+        //end of nested queue
         
+        masterQueue.tasks += nestedQueue
+            
         masterQueue.tasks += {
             self.logToTextView("back to master queue");
         }
