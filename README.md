@@ -7,7 +7,7 @@ Contents of this readme
 
 * <a href="#intro">Intro</a>
 * <a href="#simple">Simple Example</a>
-* <a href="#gdc">GDC Queue Control</a>
+* <a href="#gcd">GDC Queue Control</a>
 * <a href="#extensive">Extensive Example</a>
 * <a href="#version">Version History</a>
 * <a href="#misc">Credits and Misc</a>
