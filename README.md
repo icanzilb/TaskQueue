@@ -1,7 +1,7 @@
 TaskQueue (Swift)
 =========
 
-#### ver 0.8.2
+#### ver 0.9
 
 Contents of this readme
 
@@ -9,8 +9,9 @@ Contents of this readme
 * <a href="#simple">Simple Example</a>
 * <a href="#gcd">GDC Queue Control</a>
 * <a href="#extensive">Extensive Example</a>
+* <a href="#credit">Credit</a>
+* <a href="#license">License</a>
 * <a href="#version">Version History</a>
-* <a href="#misc">Credits and Misc</a>
 
 <a name="intro"></a>
 Intro
@@ -22,6 +23,13 @@ Even if your tasks are asynchronious like fetching location, downloading files, 
 Last but not least your tasks have full flow control over the queue, depending on the outcome of the work you are doing in your tasks you can skip the next task, abort the queue, or jump ahead to the queue completion. You can further pause, resume, and stop the queue.
 
 <a name="simple"></a>
+
+
+Installation
+========
+_The infrastructure and best practices for distributing Swift libraries is currently being developed by the developer community during this beta period of the language and Xcode. In the meantime, you can simply add TaskQueue as a git submodule, and drag the `TaskQueue.swift` file into your Xcode project._
+
+---
 Simple Example
 ========
 
@@ -32,18 +40,18 @@ Here's the simplest way to use TaskQueue in Swift:
 <pre lang="swift">
 let queue = TaskQueue()
 
-queue.tasks += {
-	... time consuming task ...
+queue.tasks +=~ {
+	... time consuming task on a background queue...
 }
 
-queue.tasks += {
-	... another time consuming task ...
+queue.tasks +=! {
+	... update UI on main queue ...
 }
 
 queue.run()
 </pre>
 
-TaskQueue will execute the tasks one after the other waiting for each task to finish and the will execute the next one.
+TaskQueue will execute the tasks one after the other waiting for each task to finish and the will execute the next one. By using the operators <code>+=~</code> and <code>+=!</code> you can easily set whether the task should execute in background or on the main queue.
 
 #### Asynchronious tasks
 
@@ -224,25 +232,36 @@ queue.run {result in
 
 Run the included demo app to see some of these examples above in action.
 
+<a name="credit"></a>
+
+Credit
+========
+
+Author: **Marin Todorov**
+
+* [https://github.com/icanzilb](https://github.com/icanzilb)
+* [https://twitter.com/icanzilb](https://twitter.com/icanzilb)
+* [http://www.touch-code-magazine.com/about/](http://www.touch-code-magazine.com/about/)
+
+<a name="license"></a> 
+License
+========
+TaskQueue is available under the MIT license. See the LICENSE file for more info.
+
 <a name="version"></a>
 Version History
 ========
+
+**New in 0.9:** <code>TaskQueue</code> allows for concurrent tasks now via the <code>maximumNumberOfActiveTasks</code> property. If it's one the class behaves as a serial queue, if greater then the class becomes a concurrent queue. Check <code>numberOfActiveTasks</code> to see how many tasks run currently.
+
+<code>stop()</code> and <code>pause()</code> are removed - use the paused property and the cancel() method instead.
+
+NB: The completion blocks do not take a parameter anymore, use the <code>lastResult</code> property if you need to check the result of the last task.
+
+Added access restrictions and readonly properties.
 
 **New in 0.8.2:** iOS8 beta 6 compatible, adding subqueues directly to <code>tasks</code>
 
 **New in 0.8:** iOS8 beta 5 compatible, syntax remains unchanged but run(TaskQueueGDC, completion) is removed as it is redundant.
 
 **New in 0.7:** GCD queue control - you can select on which GCD queue each of the tasks in the TaskQueue should run. Read about TaskQueue and GCD in the [GCD section below](https://github.com/icanzilb/TaskQueue#gcd-queue-control).
-
-<a name="misc"></a>
-Misc
-========
-Author: [Marin Todorov](http://www.touch-code-magazine.com/about/)
-
-This code is distributed under the MIT license (included in the repository as LICENSE)
-
-TODO: 
-
- 1. tests coverage 
- 2. more detailed description in README
- 3. add a way to specify on which GCD queue the completeion should fall

@@ -1,5 +1,5 @@
 //
-// TaskQueue.swift ver. 0.8.2
+// TaskQueue.swift ver. 0.9
 //
 // Copyright (c) 2014 Marin Todorov, Underplot ltd.
 // This code is distributed under the terms and conditions of the MIT license.
@@ -8,15 +8,15 @@
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-// This class was heavily inspired by Sequencer (objc) https://github.com/berzniz/Sequencer
-// but aimed to 1) bring more flow control, 2) port to swift, 3) control of GDC queues
+// This class is inspired by Sequencer (objc) https://github.com/berzniz/Sequencer
+// but aims to implement 1) flow control, 2) swift code, 3) control of GDC queues, 4) concurrency
 
 import Foundation
 
 // MARK: TaskQueue class
 
 class TaskQueue {
-    
+
     //
     // types used by the TaskQueue
     //
@@ -27,26 +27,44 @@ class TaskQueue {
     //
     // tasks and completions storage
     //
-    var tasks:[ClosureWithResultNext] = []
-    lazy var completions: [ClosureWithResult] = []
-
+    var tasks: [ClosureWithResultNext] = []
+    lazy var completions: [ClosureNoResultNext] = []
+    
+    //
+    // concurrency
+    //
+    private(set) var numberOfActiveTasks: Int = 0
+    var maximumNumberOfActiveTasks: Int = 1 {
+        willSet {
+            assert(maximumNumberOfActiveTasks>0, "Setting less than 1 task at a time not allowed")
+        }
+    }
+    
+    private var currentTask: ClosureWithResultNext? = nil
+    private(set) var lastResult: AnyObject! = nil
+    
     //
     // queue state
     //
-    var running = false
-    var paused  = false
-    var stopped = false
+    private(set) var running = false
     
-    var currentTask: ClosureWithResultNext? = nil
-    var currentResult: AnyObject! = nil
+    var paused: Bool = false {
+        didSet {
+            running = !paused
+        }
+    }
     
-    var hasCompletions = false
-    var delayUntilNextTask:Double = 0
+    private var cancelled = false
+    func cancel() {
+        cancelled = true
+    }
+    
+    private var hasCompletions = false
 
     //
     // start or resume the queue
     //
-    func run(completion:ClosureWithResult? = nil) {
+    func run(completion: ClosureNoResultNext? = nil) {
         if completion != nil {
             hasCompletions = true
             completions += [completion!]
@@ -66,68 +84,72 @@ class TaskQueue {
         _runNextTask()
     }
     
-    //
-    // pause the queue execution
-    //
-    func pause() {
-        paused = true
-    }
-    
-    //
-    // remove all tasks and completions
-    //
-    func stop () {
-        stopped = true
-    }
-    
     private func _runNextTask(result: AnyObject? = nil) {
-        if (stopped) {
+        if (cancelled) {
             tasks.removeAll(keepCapacity: false)
             completions.removeAll(keepCapacity: false)
         }
         
-        currentResult = result
+        if (numberOfActiveTasks >= maximumNumberOfActiveTasks) {
+            return
+        }
+        
+        lastResult = result
         
         if paused {
             return
         }
         
-        if tasks.count == 0 {
-            _complete()
-            return
-        }
+        var task: ClosureWithResultNext? = nil
         
-        if delayUntilNextTask > 0 {
-            
-            let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64( Double(NSEC_PER_SEC) * delayUntilNextTask ))
-            
-            dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {
-                self._runNextTask(result: result)
+        //fetch one task synchronized
+        objc_sync_enter(self)
+        if self.tasks.count > 0 {
+            task = self.tasks.removeAtIndex(0)
+            self.numberOfActiveTasks++
+        }
+        objc_sync_exit(self)
+
+        if task == nil {
+            if self.numberOfActiveTasks == 0 {
+                self._complete()
             }
-            
-            delayUntilNextTask = 0
             return
         }
         
-        currentTask = tasks.removeAtIndex(0)
-        currentTask!(result) { (nextResult:AnyObject?) in
-            self._runNextTask(result: nextResult)
-        }
+        currentTask = task
         
+        let executeTask = {
+            task!(result) { (nextResult: AnyObject?) in
+                self.numberOfActiveTasks--
+                self._runNextTask(result: nextResult)
+            }
+        }
+
+        if maximumNumberOfActiveTasks>1 {
+            //parallel queue
+            delay(seconds: 0.001) {
+                self._runNextTask(result: nil)
+            }
+            delay(seconds: 0, executeTask)
+        } else {
+            //serial queue
+            executeTask()
+        }
     }
     
     private func _complete() {
         running = false
         paused = false
-        currentTask = nil
         
         if hasCompletions {
-            for _ in completions {
-                (completions.removeAtIndex(0))(currentResult)
+            //synchronized remove completions
+            objc_sync_enter(self)
+            while completions.count > 0 {
+                (completions.removeAtIndex(0) as ClosureNoResultNext)()
             }
+            objc_sync_exit(self)
         }
-        
-        currentResult = nil
     }
     
     //
@@ -149,27 +171,37 @@ class TaskQueue {
     //
     // count of the tasks left to execute
     //
-    var count:Int {
+    var count: Int {
         return tasks.count
     }
     
     //
     // re-run the current task
     //
-    func retry(delay:Double = 0) {
+    func retry(delay: Double = 0) {
+        assert(maximumNumberOfActiveTasks==1, "You can call retry() only on serial queues")
+        
         tasks.insert(currentTask!, atIndex: 0)
         currentTask = nil
         
-        if delay > 0 {
-            delayUntilNextTask = delay
+        self._delay(seconds: delay) {
+            self.numberOfActiveTasks--
+            self._runNextTask(result: self.lastResult)
         }
-        
-        _runNextTask(result: currentResult)
     }
 
     deinit {
         //println("queue deinit")
     }
+    
+    private func _delay(#seconds:Double, completion:()->()) {
+        let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64( Double(NSEC_PER_SEC) * seconds ))
+        
+        dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {
+            completion()
+        }
+    }
+    
 }
 
 //
@@ -265,8 +297,8 @@ func +=! (inout tasks: [TaskQueue.ClosureWithResultNext], task: TaskQueue.Closur
 func += (inout tasks: [TaskQueue.ClosureWithResultNext], queue: TaskQueue) {
     tasks += [{
         _, next in
-        queue.run {result in
-            next(result)
+        queue.run {
+            next(queue.lastResult)
         }
     }]
 }

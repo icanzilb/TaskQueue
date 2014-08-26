@@ -34,8 +34,8 @@ class ViewController: UIViewController {
         })
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         demoSwitchingQueues()
     }
     
@@ -162,7 +162,7 @@ class ViewController: UIViewController {
         
         delay(seconds: 1.5) {[weak queue] in
             self.logToTextView("global: will pause the queue...")
-            queue!.pause()
+            queue!.paused = true
         }
         
         delay(seconds: 5) {[weak queue] in
@@ -211,6 +211,38 @@ class ViewController: UIViewController {
 
         masterQueue.run {_ in
             self.logToTextView("master queue completed");
+            delay(seconds: 1, self.demoConcurrentTasks)
+        }
+    }
+    
+    //
+    // Demo method #4
+    // Concurrent tasks queue
+    //
+    var concurrentTaskInc = 0
+    func demoConcurrentTasks() {
+        
+        let queue = TaskQueue()
+        queue.maximumNumberOfActiveTasks = 3
+        
+        self.logToTextView("\nfunc demoConcurrentTasks()")
+        self.logToTextView("====== concurrent tasks ======")
+        
+        for var i=0; i < 10; i++ {
+            queue.tasks += {
+                self.concurrentTaskInc++
+                let localInc = self.concurrentTaskInc
+                
+                self.logToTextView("start  #\(localInc), \(queue.numberOfActiveTasks) running, \(queue.tasks.count) left")
+                sleep(2)
+                self.logToTextView("finish #\(localInc), \(queue.numberOfActiveTasks) running, \(queue.tasks.count) left")
+            }
+        }
+        
+        
+        queue.run {
+            self.logToTextView("all concurrent tasks finished\n")
+            
             self.logToTextView("\n---- demo completed ----\n")
         }
     }
