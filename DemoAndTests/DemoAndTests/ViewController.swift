@@ -16,7 +16,7 @@ import UIKit
 //
 // util function to delay code exection by given interval
 //
-func delay(#seconds:Double, completion:()->()) {
+func mydelay(#seconds:Double, completion:()->()) {
     let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64( Double(NSEC_PER_SEC) * seconds ))
     
     dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
         queue.run {_ in
             self.logToTextView("queue finished")
             self.logToTextView("")
-            delay(seconds: 1, self.demoAllMethods)
+            mydelay(seconds: 1, self.demoAllMethods)
         }
     }
     
@@ -107,7 +107,7 @@ class ViewController: UIViewController {
         queue.tasks += {result, next in
             self.logToTextView("task #2: begin")
             
-            delay(seconds: 2) {
+            mydelay(seconds: 2) {
                 self.logToTextView("task #2: end")
                 next(nil)
             }
@@ -142,7 +142,7 @@ class ViewController: UIViewController {
             self.logToTextView("task #6: will append one more completion")
             queue.run {_ in
                 self.logToTextView("completion: appended completion run")
-                delay(seconds: 1.5, self.demoNestedQueues)
+                mydelay(seconds: 1.5, self.demoNestedQueues)
             }
             
             self.logToTextView("task #6: will skip all remaining tasks")
@@ -160,12 +160,12 @@ class ViewController: UIViewController {
             self.logToTextView("initial completion: run")
         }
         
-        delay(seconds: 1.5) {[weak queue] in
+        mydelay(seconds: 1.5) {[weak queue] in
             self.logToTextView("global: will pause the queue...")
             queue!.paused = true
         }
         
-        delay(seconds: 5) {[weak queue] in
+        mydelay(seconds: 5) {[weak queue] in
             self.logToTextView("global: resume the queue")
             queue!.run()
         }
@@ -188,13 +188,13 @@ class ViewController: UIViewController {
         let nestedQueue = TaskQueue()
         nestedQueue.tasks += {_, next in
             self.logToTextView("execute nested task #1")
-            delay(seconds: 2.0) {
+            mydelay(seconds: 2.0) {
                 next(nil)
             }
         }
         nestedQueue.tasks += {_, next in
             self.logToTextView("execute nested task #2")
-            delay(seconds: 2.0) {
+            mydelay(seconds: 2.0) {
                 next(nil)
             }
         }
@@ -211,7 +211,7 @@ class ViewController: UIViewController {
 
         masterQueue.run {_ in
             self.logToTextView("master queue completed");
-            delay(seconds: 1, self.demoConcurrentTasks)
+            mydelay(seconds: 1, self.demoConcurrentTasks)
         }
     }
     

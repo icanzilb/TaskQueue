@@ -1,5 +1,5 @@
 //
-// TaskQueue.swift ver. 0.9
+// TaskQueue.swift ver. 0.9.1
 //
 // Copyright (c) 2014 Marin Todorov, Underplot ltd.
 // This code is distributed under the terms and conditions of the MIT license.
@@ -128,10 +128,10 @@ class TaskQueue {
 
         if maximumNumberOfActiveTasks>1 {
             //parallel queue
-            delay(seconds: 0.001) {
+            _delay(seconds: 0.001) {
                 self._runNextTask(result: nil)
             }
-            delay(seconds: 0, executeTask)
+            _delay(seconds: 0, executeTask)
         } else {
             //serial queue
             executeTask()
