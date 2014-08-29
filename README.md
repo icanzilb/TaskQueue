@@ -16,6 +16,9 @@ Contents of this readme
 <a name="intro"></a>
 Intro
 ========
+
+![title](https://github.com/icanzilb/TaskQueue/tree/master/etc/readme_schema.png)
+
 TaskQueue is a Swift library which allows you to schedule tasks once and then let the queue execute them in a synchronious matter. The great thing about TaskQueue is that you get to decide on which GCD queue each of your tasks should execute beforehand and leave TaskQueue to do switching of queues as it goes.
 
 Even if your tasks are asynchronious like fetching location, downloading files, etc. TaskQueue will wait until they are finished before going on with the next task.
