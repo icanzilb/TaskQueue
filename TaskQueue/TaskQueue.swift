@@ -120,7 +120,7 @@ class TaskQueue {
         currentTask = task
         
         let executeTask = {
-            task!(result) { (nextResult: AnyObject?) in
+            task!(maximumNumberOfActiveTasks>1 ? nil: result) { (nextResult: AnyObject?) in
                 self.numberOfActiveTasks--
                 self._runNextTask(result: nextResult)
             }

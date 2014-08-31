@@ -6,7 +6,8 @@ TaskQueue (Swift)
 Contents of this readme
 
 * <a href="#intro">Intro</a>
-* <a href="#simple">Simple Example</a>
+* <a href="#simple">Sync and Async Tasks Example</a>
+* <a href=“#parallel”>Serial and Concurrent Tasks </a>
 * <a href="#gcd">GDC Queue Control</a>
 * <a href="#extensive">Extensive Example</a>
 * <a href="#credit">Credit</a>
@@ -25,7 +26,6 @@ Even if your tasks are asynchronious like fetching location, downloading files, 
 
 Last but not least your tasks have full flow control over the queue, depending on the outcome of the work you are doing in your tasks you can skip the next task, abort the queue, or jump ahead to the queue completion. You can further pause, resume, and stop the queue.
 
-<a name="simple"></a>
 
 
 Installation
@@ -33,6 +33,8 @@ Installation
 _The infrastructure and best practices for distributing Swift libraries is currently being developed by the developer community during this beta period of the language and Xcode. In the meantime, you can simply add TaskQueue as a git submodule, and drag the `TaskQueue.swift` file into your Xcode project._
 
 ---
+<a name="simple"></a>
+
 Simple Example
 ========
 
@@ -63,7 +65,7 @@ More interesting of course is when you have to do some asynchronious work in the
 <pre lang="swift">
 let queue = TaskQueue()
 
-queue.tasks += { result, next in
+queue.tasks +=~ { result, next in
     
     var url = NSURL(string: "http://jsonmodel.com")
 
@@ -74,11 +76,11 @@ queue.tasks += { result, next in
         })
 }
 
-queue.tasks += { result, next in
+queue.tasks +=! {
     println("execute next task after network call is finished")
 }
 
-queue.run {result in
+queue.run {
     println("finished")
 }
 </pre>
@@ -91,6 +93,22 @@ Few things to highlight in the example above:
 
 3. The **run** function can also take a closure as a parameter - if you pass one it will always get executed after all other tasks has finished.
 
+<a name="parallel"></a>
+Serial and Concurrent Tasks
+========
+
+By default TaskQueue executes its tasks one after another or in other words the queue has up to one active task at a time.
+
+You can however prefer for a number of tasks to execute at the same time (e.g. if you need to download a number of image files from web). To do this just increase the number of active tasks and the queue will automatically start executing tasks concurrently. For example:
+
+<pre lang=“swift”>
+queue.maximumNumberOfActiveTasks = 10
+</pre>
+
+This will make the queue execute up to 10 tasks at the same time.
+
+**Note**: _As soon as you allow for more than one task at a time certain restrictions apply: you cannot invoke retry(), and you cannot pass result from one task to another._ 
+
 <a name="gcd"></a>
 GCD Queue control
 ========
@@ -101,10 +119,7 @@ Do you want to run couple of heavy duty tasks in the background and then switch 
 let queue = TaskQueue()
 
 //
-// "+=" adds a task without specifying on which queue it should run
-// NB: the tasks will run on the GCD queue the previous tasks ran,
-// i.e. if you change to background queue - all tasks that follow will run
-// on that queue
+// "+=" adds a task to be executed on the current queue
 //
 queue.tasks += {
     //Update the App UI
@@ -126,7 +141,7 @@ queue.tasks +=! {
     //update the UI again
 }
 
-// to start the taskqueue on the current GCD queue
+// to start the queue on the current GCD queue
 queue.run()
 
 </pre>
