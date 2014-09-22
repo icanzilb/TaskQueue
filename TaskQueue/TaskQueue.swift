@@ -139,8 +139,8 @@ class TaskQueue {
     }
     
     private func _complete() {
-        running = false
         paused = false
+        running = false
         
         if hasCompletions {
             //synchronized remove completions
