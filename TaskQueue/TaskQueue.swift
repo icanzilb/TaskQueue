@@ -15,7 +15,7 @@ import Foundation
 
 // MARK: TaskQueue class
 
-class TaskQueue {
+class TaskQueue: Printable {
 
     //
     // types used by the TaskQueue
@@ -188,6 +188,16 @@ class TaskQueue {
             self.numberOfActiveTasks--
             self._runNextTask(result: self.lastResult)
         }
+    }
+
+    //
+    // Provide description when printed
+    //
+    var description: String {
+        let state = running ? "runing " : (paused ? "paused ": "stopped")
+            let type = maximumNumberOfActiveTasks==1 ? "serial": "parallel"
+            
+            return "[TaskQueue] type=\(type) state=\(state) \(tasks.count) tasks"
     }
 
     deinit {
