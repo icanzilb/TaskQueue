@@ -131,7 +131,7 @@ class TaskQueue: Printable {
             _delay(seconds: 0.001) {
                 self._runNextTask(result: nil)
             }
-            _delay(seconds: 0, executeTask)
+            _delay(seconds: 0, completion: executeTask)
         } else {
             //serial queue
             executeTask()
