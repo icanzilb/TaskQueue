@@ -14,7 +14,7 @@
 		<string>https://github.com/icanzilb/TaskQueue.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>DemoAndTests/DemoAndTests.xcodeproj/project.xcworkspace</string>
+	<string>DemoAndTests/DemoAndTests.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>AC937157CCBC4EB00B0BE238B5734E5FF0A7E5BC</key>
