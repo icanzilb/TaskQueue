@@ -15,7 +15,7 @@ import Foundation
 
 // MARK: TaskQueue class
 
-class TaskQueue: Printable {
+class TaskQueue: CustomStringConvertible {
 
     //
     // types used by the TaskQueue
@@ -122,14 +122,14 @@ class TaskQueue: Printable {
         let executeTask = {
             task!(self.maximumNumberOfActiveTasks>1 ? nil: result) { (nextResult: AnyObject?) in
                 self.numberOfActiveTasks--
-                self._runNextTask(result: nextResult)
+                self._runNextTask(nextResult)
             }
         }
 
         if maximumNumberOfActiveTasks>1 {
             //parallel queue
             _delay(seconds: 0.001) {
-                self._runNextTask(result: nil)
+                self._runNextTask(nil)
             }
             _delay(seconds: 0, completion: executeTask)
         } else {
@@ -186,7 +186,7 @@ class TaskQueue: Printable {
         
         self._delay(seconds: delay) {
             self.numberOfActiveTasks--
-            self._runNextTask(result: self.lastResult)
+            self._runNextTask(self.lastResult)
         }
     }
 
@@ -204,7 +204,7 @@ class TaskQueue: Printable {
         //println("queue deinit")
     }
     
-    private func _delay(#seconds:Double, completion:()->()) {
+    private func _delay(seconds seconds:Double, completion:()->()) {
         let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64( Double(NSEC_PER_SEC) * seconds ))
         
         dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {

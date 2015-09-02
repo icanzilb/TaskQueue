@@ -16,7 +16,7 @@ import UIKit
 //
 // util function to delay code exection by given interval
 //
-func mydelay(#seconds:Double, completion:()->()) {
+func mydelay(seconds seconds:Double, completion:()->()) {
     let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64( Double(NSEC_PER_SEC) * seconds ))
     
     dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
         queue.run {_ in
             self.logToTextView("queue finished")
             self.logToTextView("")
-            mydelay(seconds: 1, self.demoAllMethods)
+            mydelay(seconds: 1, completion: self.demoAllMethods)
         }
     }
     
@@ -121,7 +121,7 @@ class ViewController: UIViewController {
             if ++cnt > 3 {
                 next(nil)
             } else {
-                queue!.retry(delay: 1)
+                queue!.retry(1)
             }
         }
 
@@ -142,7 +142,7 @@ class ViewController: UIViewController {
             self.logToTextView("task #6: will append one more completion")
             queue.run {_ in
                 self.logToTextView("completion: appended completion run")
-                mydelay(seconds: 1.5, self.demoNestedQueues)
+                mydelay(seconds: 1.5, completion: self.demoNestedQueues)
             }
             
             self.logToTextView("task #6: will skip all remaining tasks")
@@ -211,7 +211,7 @@ class ViewController: UIViewController {
 
         masterQueue.run {_ in
             self.logToTextView("master queue completed");
-            mydelay(seconds: 1, self.demoConcurrentTasks)
+            mydelay(seconds: 1, completion: self.demoConcurrentTasks)
         }
     }
     
