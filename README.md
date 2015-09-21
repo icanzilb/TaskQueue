@@ -1,7 +1,9 @@
 TaskQueue (Swift)
 =========
 
-#### ver 0.9.1
+TaskQueue is now __Swift 2.0__. If you need Swift 1.2, checkout version [0.9.6](https://github.com/icanzilb/TaskQueue/releases/tag/0.9.6)
+
+#### ver 0.9.8
 
 Contents of this readme
 
@@ -270,7 +272,9 @@ TaskQueue is available under the MIT license. See the LICENSE file for more info
 Version History
 ========
 
-**9.1:** Bug fix
+**0.9.8:** TaskQueue is now Swift 2.0
+
+**0.9.1:** Bug fix
 
 **New in 0.9:** <code>TaskQueue</code> allows for concurrent tasks now via the <code>maximumNumberOfActiveTasks</code> property. If it's one the class behaves as a serial queue, if greater then the class becomes a concurrent queue. Check <code>numberOfActiveTasks</code> to see how many tasks run currently.
 

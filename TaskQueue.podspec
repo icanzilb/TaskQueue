@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "TaskQueue"
-  s.version          = "0.9.6"
+  s.version          = "0.9.8"
   s.summary          = "Task management made easy, bounce tasks between main thread and background threads like a pro"
   s.description      = <<-DESC
 	TaskQueue is a Swift library which allows you to schedule tasks once and then let the queue execute them in a synchronous matter. The great thing about TaskQueue is that you get to decide on which GCD queue each of your tasks should execute beforehand and leave TaskQueue to do switching of queues as it goes.
