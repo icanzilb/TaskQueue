@@ -1,5 +1,5 @@
 //
-// TaskQueue.swift ver. 0.9.6
+// TaskQueue.swift ver. 0.9.8
 //
 // Copyright (c) 2014 Marin Todorov, Underplot ltd.
 // This code is distributed under the terms and conditions of the MIT license.

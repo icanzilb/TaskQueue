@@ -412,6 +412,7 @@
 				9CCF4FFB195583280070DE9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9CCF4FFC195583280070DE9C /* Build configuration list for PBXNativeTarget "DemoAndTestsTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +421,7 @@
 				9CCF4FFE195583280070DE9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
