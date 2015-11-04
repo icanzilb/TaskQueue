@@ -201,7 +201,7 @@ class TaskQueue: CustomStringConvertible {
     }
 
     deinit {
-        //println("queue deinit")
+        //print("queue deinit")
     }
     
     private func _delay(seconds seconds:Double, completion:()->()) {
