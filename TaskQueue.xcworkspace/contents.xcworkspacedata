@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/pauly/Projects/workspaces/Third Party/TaskQueue/TaskQ/TaskQueue.xcodeproj">
+      location = "group:TaskQueue.xcodeproj">
    </FileRef>
 </Workspace>
