@@ -7,23 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B2794A61C3B45390030A02A /* TaskQueue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B27949B1C3B45390030A02A /* TaskQueue.framework */; };
 		5B2794BF1C3B495A0030A02A /* TaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2794BD1C3B495A0030A02A /* TaskQueue.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		5B2794A71C3B45390030A02A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5B2794921C3B45390030A02A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5B27949A1C3B45390030A02A;
-			remoteInfo = TaskQ;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		5B27949B1C3B45390030A02A /* TaskQueue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TaskQueue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B2794A51C3B45390030A02A /* TaskQueue.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskQueue.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B2794BC1C3B495A0030A02A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B2794BD1C3B495A0030A02A /* TaskQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskQueue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -33,14 +21,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5B2794A21C3B45390030A02A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5B2794A61C3B45390030A02A /* TaskQueue.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +39,6 @@
 			isa = PBXGroup;
 			children = (
 				5B27949B1C3B45390030A02A /* TaskQueue.framework */,
-				5B2794A51C3B45390030A02A /* TaskQueue.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,24 +83,6 @@
 			productReference = 5B27949B1C3B45390030A02A /* TaskQueue.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		5B2794A41C3B45390030A02A /* TaskQueueTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 5B2794B21C3B45390030A02A /* Build configuration list for PBXNativeTarget "TaskQueueTests" */;
-			buildPhases = (
-				5B2794A11C3B45390030A02A /* Sources */,
-				5B2794A21C3B45390030A02A /* Frameworks */,
-				5B2794A31C3B45390030A02A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				5B2794A81C3B45390030A02A /* PBXTargetDependency */,
-			);
-			name = TaskQueueTests;
-			productName = TaskQTests;
-			productReference = 5B2794A51C3B45390030A02A /* TaskQueue.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -135,9 +96,6 @@
 					5B27949A1C3B45390030A02A = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = DQUTMGPMX5;
-					};
-					5B2794A41C3B45390030A02A = {
-						CreatedOnToolsVersion = 7.2;
 					};
 				};
 			};
@@ -154,20 +112,12 @@
 			projectRoot = "";
 			targets = (
 				5B27949A1C3B45390030A02A /* TaskQueue */,
-				5B2794A41C3B45390030A02A /* TaskQueueTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5B2794991C3B45390030A02A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5B2794A31C3B45390030A02A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -185,22 +135,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5B2794A11C3B45390030A02A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		5B2794A81C3B45390030A02A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 5B27949A1C3B45390030A02A /* TaskQueue */;
-			targetProxy = 5B2794A71C3B45390030A02A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		5B2794AD1C3B45390030A02A /* Debug */ = {
@@ -240,7 +175,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -282,7 +217,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -302,6 +237,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/TaskQueue/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pilgrimagesoftware.lib.TaskQueue;
 				PRODUCT_NAME = TaskQueue;
@@ -319,30 +255,11 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/TaskQueue/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pilgrimagesoftware.lib.TaskQueue;
 				PRODUCT_NAME = TaskQueue;
 				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		5B2794B31C3B45390030A02A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = TaskQTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pilgrimagesoftware.lib.TaskQTests;
-				PRODUCT_NAME = TaskQueue;
-			};
-			name = Debug;
-		};
-		5B2794B41C3B45390030A02A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = TaskQTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pilgrimagesoftware.lib.TaskQTests;
-				PRODUCT_NAME = TaskQueue;
 			};
 			name = Release;
 		};
@@ -363,15 +280,6 @@
 			buildConfigurations = (
 				5B2794B01C3B45390030A02A /* Debug */,
 				5B2794B11C3B45390030A02A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		5B2794B21C3B45390030A02A /* Build configuration list for PBXNativeTarget "TaskQueueTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				5B2794B31C3B45390030A02A /* Debug */,
-				5B2794B41C3B45390030A02A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
