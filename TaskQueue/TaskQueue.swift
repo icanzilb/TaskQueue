@@ -1,7 +1,7 @@
 //
-// TaskQueue.swift ver. 0.9.8
+// TaskQueue.swift ver. 0.9.9
 //
-// Copyright (c) 2014 Marin Todorov, Underplot ltd.
+// Copyright (c) 2014-2016 Marin Todorov, Underplot ltd.
 // This code is distributed under the terms and conditions of the MIT license.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -17,10 +17,6 @@ import Foundation
 
 public class TaskQueue: CustomStringConvertible {
 
-    public init() {
-
-    }
-
     //
     // types used by the TaskQueue
     //
@@ -31,14 +27,14 @@ public class TaskQueue: CustomStringConvertible {
     //
     // tasks and completions storage
     //
-    public var tasks: [ClosureWithResultNext] = []
-    public lazy var completions: [ClosureNoResultNext] = []
+    public var tasks = [ClosureWithResultNext]()
+    public lazy var completions = [ClosureNoResultNext]()
 
     //
     // concurrency
     //
-    private(set) var numberOfActiveTasks: Int = 0
-    public var maximumNumberOfActiveTasks: Int = 1 {
+    private(set) var numberOfActiveTasks = 0
+    public var maximumNumberOfActiveTasks = 1 {
         willSet {
             assert(maximumNumberOfActiveTasks>0, "Setting less than 1 task at a time not allowed")
         }
@@ -108,15 +104,15 @@ public class TaskQueue: CustomStringConvertible {
 
         //fetch one task synchronized
         objc_sync_enter(self)
-        if self.tasks.count > 0 {
-            task = self.tasks.removeAtIndex(0)
-            self.numberOfActiveTasks++
+        if tasks.count > 0 {
+            task = tasks.removeAtIndex(0)
+            numberOfActiveTasks += 1
         }
         objc_sync_exit(self)
 
         if task == nil {
-            if self.numberOfActiveTasks == 0 {
-                self._complete()
+            if numberOfActiveTasks == 0 {
+                _complete()
             }
             return
         }
@@ -124,13 +120,13 @@ public class TaskQueue: CustomStringConvertible {
         currentTask = task
 
         let executeTask = {
-            task!(self.maximumNumberOfActiveTasks>1 ? nil: result) { (nextResult: AnyObject?) in
-                self.numberOfActiveTasks--
+            task!(self.maximumNumberOfActiveTasks > 1 ? nil: result) {nextResult in
+                self.numberOfActiveTasks -= 1
                 self._runNextTask(nextResult)
             }
         }
 
-        if maximumNumberOfActiveTasks>1 {
+        if maximumNumberOfActiveTasks > 1 {
             //parallel queue
             _delay(seconds: 0.001) {
                 self._runNextTask(nil)
@@ -150,7 +146,7 @@ public class TaskQueue: CustomStringConvertible {
             //synchronized remove completions
             objc_sync_enter(self)
             while completions.count > 0 {
-                (completions.removeAtIndex(0) as ClosureNoResultNext)()
+                completions.removeAtIndex(0)()
             }
             objc_sync_exit(self)
         }
@@ -161,7 +157,7 @@ public class TaskQueue: CustomStringConvertible {
     //
     public func skip() {
         if tasks.count>0 {
-            _ = tasks.removeAtIndex(0) //better way?
+            _ = tasks.removeAtIndex(0)
         }
     }
 
@@ -188,8 +184,8 @@ public class TaskQueue: CustomStringConvertible {
         tasks.insert(currentTask!, atIndex: 0)
         currentTask = nil
 
-        self._delay(seconds: delay) {
-            self.numberOfActiveTasks--
+        _delay(seconds: delay) {
+            self.numberOfActiveTasks -= 1
             self._runNextTask(self.lastResult)
         }
     }
@@ -215,7 +211,6 @@ public class TaskQueue: CustomStringConvertible {
             completion()
         }
     }
-
 }
 
 //

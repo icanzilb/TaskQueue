@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C253DDC1CB7EBB100A78F29 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C253DDB1CB7EBB100A78F29 /* LaunchScreen.storyboard */; };
 		9CCF4FE3195583280070DE9C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF4FE2195583280070DE9C /* AppDelegate.swift */; };
 		9CCF4FE5195583280070DE9C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF4FE4195583280070DE9C /* ViewController.swift */; };
 		9CCF4FE8195583280070DE9C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CCF4FE6195583280070DE9C /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9C253DDB1CB7EBB100A78F29 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9CCF4FDD195583280070DE9C /* DemoAndTests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoAndTests.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CCF4FE1195583280070DE9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9CCF4FE2195583280070DE9C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,7 +83,6 @@
 				9CCF4FE2195583280070DE9C /* AppDelegate.swift */,
 				9CCF4FE4195583280070DE9C /* ViewController.swift */,
 				9CCF4FE6195583280070DE9C /* Main.storyboard */,
-				9CCF4FE9195583280070DE9C /* Images.xcassets */,
 				9CCF4FE0195583280070DE9C /* Supporting Files */,
 			);
 			path = DemoAndTests;
@@ -90,6 +91,8 @@
 		9CCF4FE0195583280070DE9C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9CCF4FE9195583280070DE9C /* Images.xcassets */,
+				9C253DDB1CB7EBB100A78F29 /* LaunchScreen.storyboard */,
 				9CCF4FE1195583280070DE9C /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -167,7 +170,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Underplot ltd.";
 				TargetAttributes = {
 					9CCF4FDC195583280070DE9C = {
@@ -203,6 +206,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C253DDC1CB7EBB100A78F29 /* LaunchScreen.storyboard in Resources */,
 				9CCF4FE8195583280070DE9C /* Main.storyboard in Resources */,
 				9CCF4FEA195583280070DE9C /* Images.xcassets in Resources */,
 			);
@@ -278,6 +282,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -339,9 +344,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = DemoAndTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.underplot.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -350,9 +355,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = DemoAndTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.underplot.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -372,6 +377,7 @@
 				INFOPLIST_FILE = DemoAndTestsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				METAL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.underplot.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
@@ -388,6 +394,7 @@
 				INFOPLIST_FILE = DemoAndTestsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				METAL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.underplot.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
