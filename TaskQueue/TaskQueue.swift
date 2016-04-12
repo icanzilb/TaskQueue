@@ -64,6 +64,8 @@ public class TaskQueue: CustomStringConvertible {
     //
     // start or resume the queue
     //
+    public init() {}
+    
     public func run(completion: ClosureNoResultNext? = nil) {
         if completion != nil {
             hasCompletions = true

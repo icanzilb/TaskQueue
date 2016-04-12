@@ -272,6 +272,8 @@ TaskQueue is available under the MIT license. See the LICENSE file for more info
 Version History
 ========
 
+**0.9.9:** Xcode 7.3, Swift 2.2., Carthage support
+
 **0.9.8:** TaskQueue is now Swift 2.0
 
 **0.9.1:** Bug fix
