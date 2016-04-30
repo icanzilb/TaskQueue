@@ -290,5 +290,5 @@ Added access restrictions and readonly properties.
 **New in 0.8.2:** iOS8 beta 6 compatible, adding subqueues directly to <code>tasks</code>
 
 **New in 0.8:** iOS8 beta 5 compatible, syntax remains unchanged but run(TaskQueueGDC, completion) is removed as it is redundant.
-
+ 
 **New in 0.7:** GCD queue control - you can select on which GCD queue each of the tasks in the TaskQueue should run. Read about TaskQueue and GCD in the [GCD section below](https://github.com/icanzilb/TaskQueue#gcd-queue-control).
