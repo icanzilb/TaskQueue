@@ -32,7 +32,8 @@ Last but not least your tasks have full flow control over the queue, depending o
 
 Installation
 ========
-_The infrastructure and best practices for distributing Swift libraries is currently being developed by the developer community during this beta period of the language and Xcode. In the meantime, you can simply add TaskQueue as a git submodule, and drag the `TaskQueue.swift` file into your Xcode project._
+
+Include either as source code or through CocoaPods.
 
 ---
 <a name="simple"></a>
