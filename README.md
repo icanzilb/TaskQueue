@@ -10,7 +10,7 @@ Contents of this readme
 * <a href="#intro">Intro</a>
 * <a href="#simple">Sync and Async Tasks Example</a>
 * <a href=“#parallel”>Serial and Concurrent Tasks </a>
-* <a href="#gcd">GDC Queue Control</a>
+* <a href="#gcd">GCD Queue Control</a>
 * <a href="#extensive">Extensive Example</a>
 * <a href="#credit">Credit</a>
 * <a href="#license">License</a>
@@ -80,11 +80,11 @@ queue.tasks +=~ { result, next in
 }
 
 queue.tasks +=! {
-    println("execute next task after network call is finished")
+    print("execute next task after network call is finished")
 }
 
 queue.run {
-    println("finished")
+    print("finished")
 }
 </pre>
 
@@ -160,8 +160,8 @@ let queue = TaskQueue()
 // Simple sync task, just prints to console
 //
 queue.tasks += {
-    println("====== tasks ======")
-    println("task #1: run")
+    print("====== tasks ======")
+    print("task #1: run")
 }
 
 //
@@ -170,10 +170,10 @@ queue.tasks += {
 // with async work to tell the queue to continue running
 //
 queue.tasks += { result, next in
-    println("task #2: begin")
+    print("task #2: begin")
     
     delay(seconds: 2) {
-        println("task #2: end")
+        print("task #2: end")
         next(nil)
     }
     
@@ -187,7 +187,7 @@ queue.tasks += { result, next in
 //
 var cnt = 1
 queue.tasks += {[weak queue] result, next in
-    println("task #3: try #\(cnt)")
+    print("task #3: try #\(cnt)")
     
     if ++cnt > 3 {
         next(nil)
@@ -201,14 +201,14 @@ queue.tasks += {[weak queue] result, next in
 // (no capture cycle here)
 //
 queue.tasks += ({
-    println("task #4: run")
-    println("task #4: will skip next task")
+    print("task #4: run")
+    print("task #4: will skip next task")
     
     queue.skip()
     })
 
 queue.tasks += {
-    println("task #5: run")
+    print("task #5: run")
 }
 
 //
@@ -218,19 +218,19 @@ queue.tasks += {
 // NB: This does not remove the completions added
 //
 queue.tasks += {
-    println("task #6: run")
+    print("task #6: run")
     
-    println("task #6: will append one more completion")
+    print("task #6: will append one more completion")
     queue.run {
-        _ in println("completion: appended completion run")
+        _ in print("completion: appended completion run")
     }
     
-    println("task #6: will skip all remaining tasks")
+    print("task #6: will skip all remaining tasks")
     queue.removeAll()
 }
 
 queue.tasks += {
-    println("task #7: run")
+    print("task #7: run")
 }
 
 //
@@ -246,8 +246,8 @@ queue.run()
 // trough executing the queue.
 //
 queue.run {result in
-    println("====== completions ======")
-    println("initial completion: run")
+    print("====== completions ======")
+    print("initial completion: run")
 }
 </pre>
 
