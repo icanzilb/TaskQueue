@@ -95,7 +95,8 @@
 				TargetAttributes = {
 					5B27949A1C3B45390030A02A = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = DQUTMGPMX5;
+						DevelopmentTeam = 4ER83K7G3W;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -232,6 +233,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 4ER83K7G3W;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -242,6 +244,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.pilgrimagesoftware.lib.TaskQueue;
 				PRODUCT_NAME = TaskQueue;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -250,6 +253,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 4ER83K7G3W;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -260,6 +264,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.pilgrimagesoftware.lib.TaskQueue;
 				PRODUCT_NAME = TaskQueue;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
