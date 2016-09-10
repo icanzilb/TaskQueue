@@ -3,7 +3,7 @@
 //  DemoAndTestsTests
 //
 //  Created by Marin Todorov on 6/21/14.
-//  Copyright (c) 2014 Underplot ltd. All rights reserved.
+//  Copyright (c) 2014-present Underplot ltd. All rights reserved.
 //
 
 import XCTest
