@@ -14,23 +14,36 @@
 import UIKit
 
 class ViewController: UIViewController {
-    func delay(seconds seconds:Double, completion:()->()) {
-        let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64( Double(NSEC_PER_SEC) * seconds ))
+    func delay(seconds:Double, completion:@escaping ()->()) {
+//        let popTime = DispatchTime.now(dispatch_time_t(DispatchTime.now), Int64( Double(NSEC_PER_SEC) * seconds ))
+//        
         
-        dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {
+        let poptime2 = DispatchTime.now() + DispatchTimeInterval.seconds(Int(seconds))
+        
+        DispatchQueue.main.asyncAfter(deadline: poptime2) { 
             completion()
         }
+        
+//        dispatch_after(popTime, DispatchQueue.global(DispatchQueue.GlobalQueuePriority.low, 0)) {
+//            completion()
+//        }
     }
     
     @IBOutlet var text:UITextView!
     
-    func logToTextView(line:String) {
-        dispatch_async(dispatch_get_main_queue(), {
+    func logToTextView(_ line:String) {
+        
+        DispatchQueue.main.async { 
             self.text.text = line + "\n" + self.text.text!
-        })
+        }
+        
+        
+//        dispatch_get_main_queue().asynchronously(DispatchQueue.mainexecute: {
+//            self.text.text = line + "\n" + self.text.text!
+//        })
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         demoSwitchingQueues()
     }
@@ -52,8 +65,10 @@ class ViewController: UIViewController {
         queue.tasks +=! { result, next in
             self.logToTextView("task #2: animate UI from main queue")
 
-            UIView.animateWithDuration(3, animations: {
-                self.text.backgroundColor = UIColor.redColor()
+            
+            
+            UIView.animate(withDuration: 3, animations: {
+                self.text.backgroundColor = UIColor.red
             }) {_ in
                 next(nil)
             }
@@ -70,8 +85,8 @@ class ViewController: UIViewController {
         queue.tasks +=! { result, next in
             self.logToTextView("task #4: animate UI from main queue")
             
-            UIView.animateWithDuration(1, animations: {
-                self.text.backgroundColor = UIColor.whiteColor()
+            UIView.animate(withDuration: 1, animations: {
+                self.text.backgroundColor = UIColor.white
             }) {_ in
                 next(nil)
             }
