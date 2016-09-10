@@ -21,8 +21,8 @@ open class TaskQueue: CustomStringConvertible {
     // types used by the TaskQueue
     //
     public typealias ClosureNoResultNext = () -> Void
-    public typealias ClosureWithResult = (Any?) -> Void
-    public typealias ClosureWithResultNext = (Any? , (Any?) -> Void) -> Void
+    //public typealias ClosureWithResult = (Any?) -> Void
+    public typealias ClosureWithResultNext = (Any? , @escaping (Any?) -> Void) -> Void
 
     //
     // tasks and completions storage
@@ -213,6 +213,7 @@ open class TaskQueue: CustomStringConvertible {
             completion()
         }
     }
+    
 }
 
 //
@@ -255,17 +256,14 @@ public func += (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping 
 //
 public func +=~ (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureNoResultNext) {
     
-    
-    let theTask : (Any? , @escaping (Any?) -> Void) -> Void = {
+    tasks += [{
         _, next in
-        
         DispatchQueue.global(qos: .background).async {
             task()
             next(nil)
         }
-    }
+    }]
     
-    tasks += [theTask as! TaskQueue.ClosureWithResultNext]
 }
 
 //
@@ -273,15 +271,13 @@ public func +=~ (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping
 //
 public func +=~ (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureWithResultNext) {
     
-    let theTask : (Any? , @escaping (Any?) -> Void) -> Void = {
+    tasks += [{
         result, next in
         
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .utility).async {
             task(result, next)
         }
-    }
-    
-    tasks += [theTask as! TaskQueue.ClosureWithResultNext]
+    }]
 }
 
 // MARK: Add tasks on the main queue
@@ -292,16 +288,14 @@ public func +=~ (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping
 //
 public func +=! (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureNoResultNext) {
     
-    let theTask : (Any? , @escaping (Any?) -> Void) -> Void = {
+    tasks += [{
         _, next in
-        
         DispatchQueue.main.async {
             task()
             next(nil)
         }
-    }
-    
-    tasks += [theTask as! TaskQueue.ClosureWithResultNext]
+        
+    }]
     
 }
 
@@ -310,14 +304,13 @@ public func +=! (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping
 //
 public func +=! (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureWithResultNext) {
     
-    let theTask : (Any? , @escaping (Any?) -> Void) -> Void = {
+    
+    tasks += [{
         result, next in
         DispatchQueue.main.async {
             task(result, next)
         }
-    }
-    
-    tasks += [theTask as! TaskQueue.ClosureWithResultNext]
+    }]
 }
 
 // MARK: Adding sub-queues
@@ -327,12 +320,10 @@ public func +=! (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping
 //
 public func += (tasks: inout [TaskQueue.ClosureWithResultNext], queue: TaskQueue) {
     
-    let theTask : (Any? , @escaping (Any?) -> Void) -> Void = {
+    tasks += [{
         _, next in
         queue.run {
             next(queue.lastResult)
         }
-    }
-    
-    tasks += [theTask as! TaskQueue.ClosureWithResultNext]
+    }]
 }
