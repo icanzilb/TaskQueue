@@ -1,6 +1,8 @@
 TaskQueue (Swift)
 =========
 
+As of 1.0.1 TaskQueue is __Swift 3__, check the instructions at the bottom if you're using it via CocoaPods.
+
 TaskQueue is now __Swift 2.0__. If you need Swift 1.2, checkout version [0.9.6](https://github.com/icanzilb/TaskQueue/releases/tag/0.9.6)
 
 #### ver 0.9.8
@@ -34,6 +36,19 @@ Installation
 ========
 
 Include either as source code or through CocoaPods.
+
+Since TaskQueue is a swift3 library, you got to add this piece of code to your project's Podfile, to update your targets' swift language version:
+
+```
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['SWIFT_VERSION'] = '3.0'
+            config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '10.10'
+        end
+    end
+end
+```
 
 ---
 <a name="simple"></a>
