@@ -14,33 +14,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-    func delay(seconds:Double, completion:@escaping ()->()) {
-//        let popTime = DispatchTime.now(dispatch_time_t(DispatchTime.now), Int64( Double(NSEC_PER_SEC) * seconds ))
-//        
-        
-        let poptime2 = DispatchTime.now() + DispatchTimeInterval.seconds(Int(seconds))
-        
-        DispatchQueue.main.asyncAfter(deadline: poptime2) { 
-            completion()
-        }
-        
-//        dispatch_after(popTime, DispatchQueue.global(DispatchQueue.GlobalQueuePriority.low, 0)) {
-//            completion()
-//        }
+    func delay(seconds:Double, completion: @escaping ()-> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: completion)
     }
     
     @IBOutlet var text:UITextView!
     
     func logToTextView(_ line:String) {
-        
-        DispatchQueue.main.async { 
+        DispatchQueue.main.async {
             self.text.text = line + "\n" + self.text.text!
         }
-        
-        
-//        dispatch_get_main_queue().asynchronously(DispatchQueue.mainexecute: {
-//            self.text.text = line + "\n" + self.text.text!
-//        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -65,14 +48,11 @@ class ViewController: UIViewController {
         queue.tasks +=! { result, next in
             self.logToTextView("task #2: animate UI from main queue")
 
-            
-            
             UIView.animate(withDuration: 3, animations: {
                 self.text.backgroundColor = UIColor.red
             }) {_ in
                 next(nil)
             }
-            
         }
         
         // switch to background queue, heavy work, etc.
@@ -90,7 +70,6 @@ class ViewController: UIViewController {
             }) {_ in
                 next(nil)
             }
-            
         }
 
         // when finished with tasks, call the second demo method
@@ -184,7 +163,6 @@ class ViewController: UIViewController {
             self.logToTextView("global: resume the queue")
             queue!.run()
         }
-        
     }
     
     //
@@ -258,7 +236,6 @@ class ViewController: UIViewController {
                 self.logToTextView("finish #\(localInc), \(queue.numberOfActiveTasks) running, \(queue.tasks.count) left")
             }
         }
-        
         
         queue.run {
             self.logToTextView("all concurrent tasks finished\n")

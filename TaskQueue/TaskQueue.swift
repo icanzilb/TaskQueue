@@ -21,7 +21,6 @@ open class TaskQueue: CustomStringConvertible {
     // types used by the TaskQueue
     //
     public typealias ClosureNoResultNext = () -> Void
-    //public typealias ClosureWithResult = (Any?) -> Void
     public typealias ClosureWithResultNext = (Any? , @escaping (Any?) -> Void) -> Void
 
     //
