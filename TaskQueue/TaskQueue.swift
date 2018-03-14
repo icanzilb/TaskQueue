@@ -177,6 +177,17 @@ open class TaskQueue: CustomStringConvertible {
     }
 
     //
+    // pause and reset the current task
+    //
+    open func pauseAndResetCurrentTask() {
+        paused = true
+
+        tasks.insert(currentTask!, at: 0)
+        currentTask = nil
+        self.numberOfActiveTasks -= 1
+    }
+
+    //
     // re-run the current task
     //
     open func retry(_ delay: Double = 0) {
