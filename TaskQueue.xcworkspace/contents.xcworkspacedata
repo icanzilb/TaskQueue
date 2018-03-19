@@ -4,4 +4,7 @@
    <FileRef
       location = "group:TaskQueue.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:iOSExample/iOSExample.xcodeproj">
+   </FileRef>
 </Workspace>

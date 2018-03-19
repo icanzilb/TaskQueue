@@ -1,5 +1,5 @@
 //
-// TaskQueue.swift ver. 1.0.0
+// TaskQueue.swift
 //
 // Copyright (c) 2014-2016 Marin Todorov, Underplot ltd.
 // This code is distributed under the terms and conditions of the MIT license.
@@ -10,6 +10,7 @@
 //
 // This class is inspired by Sequencer (objc) https://github.com/berzniz/Sequencer
 // but aims to implement 1) flow control, 2) swift code, 3) control of GDC queues, 4) concurrency
+//
 
 import Foundation
 
@@ -32,10 +33,10 @@ open class TaskQueue: CustomStringConvertible {
     //
     // concurrency
     //
-    fileprivate(set) var numberOfActiveTasks = 0
+    public fileprivate(set) var numberOfActiveTasks = 0
     open var maximumNumberOfActiveTasks = 1 {
         willSet {
-            assert(maximumNumberOfActiveTasks>0, "Setting less than 1 task at a time not allowed")
+            assert(maximumNumberOfActiveTasks > 0, "Setting less than 1 task at a time not allowed")
         }
     }
 
@@ -121,7 +122,7 @@ open class TaskQueue: CustomStringConvertible {
         currentTask = task
 
         let executeTask = {
-            task!(self.maximumNumberOfActiveTasks > 1 ? nil: result) {nextResult in
+            task!(self.maximumNumberOfActiveTasks > 1 ? nil : result) { nextResult in
                 self.numberOfActiveTasks -= 1
                 self._runNextTask(nextResult)
             }
@@ -157,7 +158,7 @@ open class TaskQueue: CustomStringConvertible {
     // skip the next task
     //
     open func skip() {
-        if tasks.count>0 {
+        if tasks.count > 0 {
             _ = tasks.remove(at: 0)
         }
     }
@@ -191,7 +192,7 @@ open class TaskQueue: CustomStringConvertible {
     // re-run the current task
     //
     open func retry(_ delay: Double = 0) {
-        assert(maximumNumberOfActiveTasks==1, "You can call retry() only on serial queues")
+        assert(maximumNumberOfActiveTasks == 1, "You can call retry() only on serial queues")
 
         tasks.insert(currentTask!, at: 0)
         currentTask = nil
@@ -213,7 +214,7 @@ open class TaskQueue: CustomStringConvertible {
     }
 
     deinit {
-        //print("queue deinit")
+        // print("queue deinit")
     }
 
     fileprivate func _delay(seconds:Double, completion:@escaping ()->()) {
@@ -242,7 +243,6 @@ infix operator  +=!
 // Add a task closure with result and next params
 //
 public func += (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureWithResultNext) {
-    
     tasks += [task]
 }
 
@@ -250,7 +250,6 @@ public func += (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping 
 // Add a task closure that doesn't take result/next params
 //
 public func += (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureNoResultNext) {
-    
     tasks += [{
         _, next in
         task()
@@ -265,7 +264,6 @@ public func += (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping 
 // The task gets executed on a low prio queueu
 //
 public func +=~ (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureNoResultNext) {
-    
     tasks += [{
         _, next in
         DispatchQueue.global(qos: .background).async {
@@ -273,14 +271,12 @@ public func +=~ (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping
             next(nil)
         }
     }]
-    
 }
 
 //
 // The task gets executed on a low prio queueu
 //
 public func +=~ (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureWithResultNext) {
-    
     tasks += [{
         result, next in
         
@@ -297,7 +293,6 @@ public func +=~ (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping
 // The task gets executed on the main queue - update UI, etc.
 //
 public func +=! (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureNoResultNext) {
-    
     tasks += [{
         _, next in
         DispatchQueue.main.async {
@@ -306,15 +301,12 @@ public func +=! (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping
         }
         
     }]
-    
 }
 
 //
 // The task gets executed on the main queue - update UI, etc.
 //
 public func +=! (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping TaskQueue.ClosureWithResultNext) {
-    
-    
     tasks += [{
         result, next in
         DispatchQueue.main.async {
@@ -329,7 +321,6 @@ public func +=! (tasks: inout [TaskQueue.ClosureWithResultNext], task: @escaping
 // Add a queue to the task list
 //
 public func += (tasks: inout [TaskQueue.ClosureWithResultNext], queue: TaskQueue) {
-    
     tasks += [{
         _, next in
         queue.run {
