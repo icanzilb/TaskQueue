@@ -18,7 +18,6 @@
 * [Serial and Concurrent Tasks](#serial-and-concurrent-tasks)
 * [GCD Queue Control](#gcd-queue-control)
 * [Extensive Example](#extensive-example)
-* [Swift Version Support](#swift-version-support)
 * [Credit](#credit)
 * [License](#license)
 
@@ -294,11 +293,6 @@ queue.run { result in
 
 Run the included demo app to see some of these examples above in action.
 
-## Swift Version Support
-
-*Swift 3 / 4*: 1.0.1 -> present
-*Swift 2*: 0.9.8 -> 0.9.10
-*Swift 1.2*: 0.9.6 and older
 
 ## Credit
 
