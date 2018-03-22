@@ -1,15 +1,6 @@
-#
-# Be sure to run `pod lib lint TaskQueue.podspec' to ensure this is a
-# valid spec and remove all comments before submitting the spec.
-#
-# Any lines starting with a # are optional, but encouraged
-#
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = "TaskQueue"
-  s.version          = "1.0.1"
+  s.version          = "1.1.0"
   s.summary          = "Task management made easy, bounce tasks between main thread and background threads like a pro"
   s.description      = <<-DESC
 	TaskQueue is a Swift library which allows you to schedule tasks once and then let the queue execute them in a synchronous matter. The great thing about TaskQueue is that you get to decide on which GCD queue each of your tasks should execute beforehand and leave TaskQueue to do switching of queues as it goes.
@@ -29,5 +20,5 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.11'
   s.tvos.deployment_target = '9.0'
 
-  s.source_files = 'TaskQueue'
+  s.source_files = 'Sources/*.swift'
 end
