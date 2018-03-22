@@ -3,7 +3,7 @@
 [![Platform](https://img.shields.io/cocoapods/p/TaskQueue.svg?style=flat)](http://cocoadocs.org/docsets/TaskQueue)
 [![Cocoapods Compatible](https://img.shields.io/cocoapods/v/TaskQueue.svg)](https://img.shields.io/cocoapods/v/TaskQueue.svg)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/icanzlib/TaskQueue/master/LICENSE.md)
+[![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/icanzilb/TaskQueue/master/LICENSE.md)
 
 
 ## Table of Contents
@@ -81,7 +81,7 @@ $ brew install carthage
 To integrate TaskQueue into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "icanzlib/TaskQueue"
+github "icanzilb/TaskQueue"
 ```
 
 ## Simple Example
