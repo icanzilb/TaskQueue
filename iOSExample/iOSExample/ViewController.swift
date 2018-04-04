@@ -49,11 +49,12 @@ class ViewController: UIViewController {
         queue.tasks +=! { result, next in
             self.logToTextView("task #2: animate UI from main queue")
 
-            UIView.animate(withDuration: 3, animations: {
-                self.text.backgroundColor = UIColor.red
-            }) {_ in
-                next(nil)
-            }
+            UIView.animate(
+                withDuration: 3,
+                animations: {
+                    self.text.backgroundColor = UIColor.red
+                }
+            ) { _ in next(nil) }
         }
         
         // switch to background queue, heavy work, etc.
@@ -66,15 +67,16 @@ class ViewController: UIViewController {
         queue.tasks +=! { result, next in
             self.logToTextView("task #4: animate UI from main queue")
             
-            UIView.animate(withDuration: 1, animations: {
-                self.text.backgroundColor = UIColor.white
-            }) {_ in
-                next(nil)
-            }
+            UIView.animate(
+                withDuration: 1,
+                animations: {
+                    self.text.backgroundColor = UIColor.white
+                }
+            ) { _ in next(nil) }
         }
 
         // when finished with tasks, call the second demo method
-        queue.run {[weak self] _ in
+        queue.run { [weak self] in
             guard let `self` = self else {return}
             
             self.logToTextView("queue finished")
@@ -97,7 +99,7 @@ class ViewController: UIViewController {
             self.logToTextView("task #1: run")
         }
 
-        queue.tasks += {[weak self] result, next in
+        queue.tasks += { [weak self] result, next in
             guard let `self` = self else {return}
 
             self.logToTextView("task #2: begin")
@@ -108,7 +110,7 @@ class ViewController: UIViewController {
         }
 
         var cnt = 1
-        queue.tasks += {[weak queue] result, next in
+        queue.tasks += { [weak queue] result, next in
             self.logToTextView("task #3: try #\(cnt)")
             
             cnt += 1
@@ -124,7 +126,7 @@ class ViewController: UIViewController {
             self.logToTextView("task #4: will skip next task")
             
             queue.skip()
-            })
+        })
 
         queue.tasks += {
             self.logToTextView("task #5: run")
@@ -134,7 +136,7 @@ class ViewController: UIViewController {
             self.logToTextView("task #6: run")
             self.logToTextView("task #6: will append one more completion")
             
-            queue.run {[weak self] _ in
+            queue.run { [weak self] in
                 guard let `self` = self else {return}
                 self.logToTextView("completion: appended completion run")
                 self.delay(seconds: 1.5, completion: self.demoNestedQueues)
@@ -150,17 +152,17 @@ class ViewController: UIViewController {
 
         queue.run()
 
-        queue.run {result in
+        queue.run {
             self.logToTextView("====== completions ======")
             self.logToTextView("initial completion: run")
         }
         
-        delay(seconds: 1.5) {[weak queue] in
+        delay(seconds: 1.5) { [weak queue] in
             self.logToTextView("global: will pause the queue...")
             queue!.paused = true
         }
         
-        delay(seconds: 5) {[weak queue] in
+        delay(seconds: 5) { [weak queue] in
             self.logToTextView("global: resume the queue")
             queue!.run()
         }
@@ -180,7 +182,7 @@ class ViewController: UIViewController {
         
         //define nested queue
         let nestedQueue = TaskQueue()
-        nestedQueue.tasks += {[weak self] _, next in
+        nestedQueue.tasks += { [weak self] _, next in
             guard let `self` = self else {return}
             
             self.logToTextView("execute nested task #1")
@@ -188,14 +190,16 @@ class ViewController: UIViewController {
                 next(nil)
             }
         }
-        nestedQueue.tasks += {[weak self] _, next in
+
+        nestedQueue.tasks += { [weak self] _, next in
             guard let `self` = self else {return}
             self.logToTextView("execute nested task #2")
             self.delay(seconds: 2.0) {
                 next(nil)
             }
         }
-        nestedQueue.completions.append({_ in
+
+        nestedQueue.completions.append({
             self.logToTextView("completed nested queue")
         })
         //end of nested queue
@@ -206,7 +210,7 @@ class ViewController: UIViewController {
             self.logToTextView("back to master queue");
         }
 
-        masterQueue.run {[weak self]_ in
+        masterQueue.run { [weak self] in
             guard let `self` = self else {return}
             
             self.logToTextView("master queue completed");
@@ -240,9 +244,7 @@ class ViewController: UIViewController {
         
         queue.run {
             self.logToTextView("all concurrent tasks finished\n")
-            
             self.logToTextView("\n---- demo completed ----\n")
         }
     }
 }
-
