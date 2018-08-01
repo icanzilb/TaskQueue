@@ -18,6 +18,8 @@
 * [Serial and Concurrent Tasks](#serial-and-concurrent-tasks)
 * [GCD Queue Control](#gcd-queue-control)
 * [Extensive Example](#extensive-example)
+* [Callbacks](#callbacks)
+* [Callbacks Example](#callbacks-example)
 * [Credit](#credit)
 * [License](#license)
 
@@ -293,6 +295,48 @@ queue.run { result in
 
 Run the included demo app to see some of these examples above in action.
 
+## Callbacks
+
+You can register closures to receive status updates on the queue after each task executes.
+
+```swift
+typealias ClosureWithTaskQueueStatus = (TaskQueueStatus) -> Void
+```
+
+They will receive a status object:
+
+```swift
+struct TaskQueueStatus {
+  var activeTaskCount: Int
+  var maximumActiveTaskCount: Int
+  var queuedTaskCount: Int
+  var running: Bool
+}
+```
+
+## Callbacks example
+
+```swift
+let queue = TaskQueue()
+
+//
+// Simple sync task, just prints to console
+//
+queue.tasks += {
+    print("====== tasks ======")
+    print("task #1: run")
+}
+
+//
+// Simple callback, just prints to console
+//
+queue.callbacks.append({ (status) in
+  print("task queue status", status)
+})
+
+
+queue.run()
+```
 
 ## Credit
 
