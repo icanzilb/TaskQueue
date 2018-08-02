@@ -15,10 +15,10 @@
 import Foundation
 
 public struct TaskQueueStatus {
-  var activeTaskCount: Int
-  var maximumActiveTaskCount: Int
-  var queuedTaskCount: Int
-  var running: Bool
+  public var activeTaskCount: Int
+  public var maximumActiveTaskCount: Int
+  public var queuedTaskCount: Int
+  public var running: Bool
 }
 
 // MARK: TaskQueue class
