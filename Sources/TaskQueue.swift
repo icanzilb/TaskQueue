@@ -134,14 +134,14 @@ open class TaskQueue: CustomStringConvertible {
             task!(self.maximumNumberOfActiveTasks > 1 ? nil : result) { nextResult in
                 self.numberOfActiveTasks -= 1
                 self._runNextTask(nextResult)
+                self.callbacks.forEach({ (callback) in
+                  callback(TaskQueueStatus(activeTaskCount: self.numberOfActiveTasks,
+                                           maximumActiveTaskCount: self.maximumNumberOfActiveTasks,
+                                           queuedTaskCount: self.tasks.count,
+                                           running: self.running)
+                  )
+                })
             }
-          self.callbacks.forEach({ (callback) in
-            callback(TaskQueueStatus(activeTaskCount: self.numberOfActiveTasks,
-                                     maximumActiveTaskCount: self.maximumNumberOfActiveTasks,
-                                     queuedTaskCount: self.tasks.count,
-                                     running: self.running)
-            )
-          })
         }
 
         if maximumNumberOfActiveTasks > 1 {
