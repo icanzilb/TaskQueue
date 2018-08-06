@@ -14,6 +14,13 @@
 
 import Foundation
 
+public struct TaskQueueStatus {
+  public var activeTaskCount: Int
+  public var maximumActiveTaskCount: Int
+  public var queuedTaskCount: Int
+  public var running: Bool
+}
+
 // MARK: TaskQueue class
 
 open class TaskQueue: CustomStringConvertible {
@@ -23,12 +30,14 @@ open class TaskQueue: CustomStringConvertible {
     //
     public typealias ClosureNoResultNext = () -> Void
     public typealias ClosureWithResultNext = (Any? , @escaping (Any?) -> Void) -> Void
+    public typealias ClosureWithTaskQueueStatus = (TaskQueueStatus) -> Void
 
     //
     // tasks and completions storage
     //
     open var tasks = [ClosureWithResultNext]()
     open lazy var completions = [ClosureNoResultNext]()
+    open var callbacks = [ClosureWithTaskQueueStatus]()
 
     //
     // concurrency
@@ -125,6 +134,13 @@ open class TaskQueue: CustomStringConvertible {
             task!(self.maximumNumberOfActiveTasks > 1 ? nil : result) { nextResult in
                 self.numberOfActiveTasks -= 1
                 self._runNextTask(nextResult)
+                self.callbacks.forEach({ (callback) in
+                  callback(TaskQueueStatus(activeTaskCount: self.numberOfActiveTasks,
+                                           maximumActiveTaskCount: self.maximumNumberOfActiveTasks,
+                                           queuedTaskCount: self.tasks.count,
+                                           running: self.running)
+                  )
+                })
             }
         }
 
